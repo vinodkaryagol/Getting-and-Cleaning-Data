@@ -1,95 +1,43 @@
-# Tidy data set description
+# CodeBook
+This code book describes the  data and transformations used by `run_analysis.R` and the variables to produce the output of Tidy.txt
+## The Data Source
 
-### The variables in the tidy data
-Tidy data contains 180 rows and 68 columns. Each row has averaged variables for each subject and each activity.
+[Original Data Source](https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip)
 
-### Only all the variables estimated from mean and standard deviation in the tidy set were kept.
+[Original Description of the Data Set](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)
 
-* mean(): Mean value
-* std(): Standard deviation
+## Data Set Information
 
-### The data were averaged based on subject and activity group.
+### Input Data Set
 
-Subject column is numbered sequentially from 1 to 30.
-Activity column has 6 types as listed below.
-1. WALKING
-2. WALKING_UPSTAIRS
-3. WALKING_DOWNSTAIRS
-4. SITTING
-5. STANDING
-6. LAYING
+- `X_train.txt` contains variable features that are intended for training.
+- `y_train.txt` contains the activities corresponding to `X_train.txt`.
+- `subject_train.txt` contains information on the subjects from whom data is collected.
+- `X_test.txt` contains variable features that are intended for testing.
+- `y_test.txt` contains the activities corresponding to `X_test.txt`.
+- `subject_test.txt` contains information on the subjects from whom data is collected.
+- `activity_labels.txt` contains metadata on the different types of activities.
+- `features.txt` contains the name of the features in the data sets.
 
-### The tidy data contains 6 rows (averaged based on activity) and 68 columns (66 variables and activity labels).
-1. "activitylabel"
-2. "subject"
-3. "tBodyAcc-mean()-X"          
-4. "tBodyAcc-mean()-Y"
-5. "tBodyAcc-mean()-Z"
-6. "tBodyAcc-std()-X"           
-7. "tBodyAcc-std()-Y" 
-8. "tBodyAcc-std()-Z"
-9. "tGravityAcc-mean()-X"
-10. "tGravityAcc-mean()-Y"
-11. "tGravityAcc-mean()-Z"
-12. "tGravityAcc-std()-X"        
-13. "tGravityAcc-std()-Y"
-14. "tGravityAcc-std()-Z"
-15. "tBodyAccJerk-mean()-X"      
-16. "tBodyAccJerk-mean()-Y"
-17. "tBodyAccJerk-mean()-Z"
-18. "tBodyAccJerk-std()-X"       
-19. "tBodyAccJerk-std()-Y"
-20. "tBodyAccJerk-std()-Z"
-21. "tBodyGyro-mean()-X"         
-22. "tBodyGyro-mean()-Y"
-23. "tBodyGyro-mean()-Z"
-24. "tBodyGyro-std()-X"          
-25. "tBodyGyro-std()-Y" 
-26. "tBodyGyro-std()-Z" 
-27. "tBodyGyroJerk-mean()-X"     
-28. "tBodyGyroJerk-mean()-Y"
-29. "tBodyGyroJerk-mean()-Z"
-30. "tBodyGyroJerk-std()-X"      
-31. "tBodyGyroJerk-std()-Y"
-32. "tBodyGyroJerk-std()-Z"
-33. "tBodyAccMag-mean()"         
-34. "tBodyAccMag-std()"
-35. "tGravityAccMag-mean()"
-36. "tGravityAccMag-std()"       
-37. "tBodyAccJerkMag-mean()"
-38. "tBodyAccJerkMag-std()"
-39. "tBodyGyroMag-mean()"        
-40. "tBodyGyroMag-std()"
-41. "tBodyGyroJerkMag-mean()"
-42. "tBodyGyroJerkMag-std()"     
-43. "fBodyAcc-mean()-X"
-44. "fBodyAcc-mean()-Y"
-45. "fBodyAcc-mean()-Z"          
-46. "fBodyAcc-std()-X"
-47. "fBodyAcc-std()-Y"
-48. "fBodyAcc-std()-Z"           
-49. "fBodyAccJerk-mean()-X"
-50. "fBodyAccJerk-mean()-Y"
-51. "fBodyAccJerk-mean()-Z"      
-52. "fBodyAccJerk-std()-X"
-53. "fBodyAccJerk-std()-Y"
-54. "fBodyAccJerk-std()-Z"       
-55. "fBodyGyro-mean()-X"  
-56. "fBodyGyro-mean()-Y"
-57. "fBodyGyro-mean()-Z"         
-58. "fBodyGyro-std()-X"
-59. "fBodyGyro-std()-Y"   
-60. "fBodyGyro-std()-Z"          
-61. "fBodyAccMag-mean()"
-62. "fBodyAccMag-std()"   
-63. "fBodyBodyAccJerkMag-mean()" 
-64. "fBodyBodyAccJerkMag-std()"
-65. "fBodyBodyGyroMag-mean()" 
-66. "fBodyBodyGyroMag-std()"     
-67. "fBodyBodyGyroJerkMag-mean()" 
-68. "fBodyBodyGyroJerkMag-std()"
+## Transformations
+The following are the transformations:
 
-### variable units
-Activity variable is factor type.
-Subject variable is integer type.
-All the other variables are numeric type.
+- `X_train.txt` is read into table `train_features`
+- `y_train.txt` is read into table `train_activity`
+- `subject_train.txt` is read into table `train_subject`
+- `X_test.txt` is read into table `test_features`
+- `y_test.txt` is read into table `test_activity`
+- `subject_test.txt` is read into table `test_subject`
+- `features.txt` is read into table `FeatureNames`
+- `activity_labels.txt` is read into table `ActivityLabels`
+- The respective files for Train and Test are Subject, Features and Activity are merged into the corresponding `Subject`, `Activity` and `Features`
+- The `Subject`, `Activity` and `Features` are merged to create ‘CompleteData’
+-  Indices of columns that contain std or mean, activity and subject are taken into requiredColumns .
+- extractedData is created with data from columns in `filterCols`
+- Activity column in extractedData is updated with descriptive names of activities taken from `ActivityLabels`. Activity column is expressed as a factor variable.
+- Acronyms in variable names in extractedData, like ‘Acc’, ‘Gyro’, ‘Mag’, ’t’ and ‘f’ are replaced with descriptive labels such as ‘Accelerometer’, ‘Gyroscpoe’, ‘Magnitude’, ‘Time’ and ‘Frequency’.
+- `tidyData` is created as a set with average for each activity and subject of extractedData. Entries in `tidyData` are ordered based on activity and subject.
+- Finally, the data in tidyData is written into `Tidy.txt`
+
+## Output Data Set
+The output data `tidy.txt` is a space delimited value file. The header line contains the names of the variables. It contains the mean and standard deviation values of the data contained in the input files
